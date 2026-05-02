@@ -1,596 +1,193 @@
-/* ──────────────────────────────────────────────
-   RESET & VARIABLES
-────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Future You at 30</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
 
-:root {
-  --bg:        #0a0a0a;
-  --bg2:       #111111;
-  --card:      #161616;
-  --card2:     #1e1e1e;
-  --border:    rgba(255,255,255,0.07);
-  --green:     #a3ff12;
-  --purple:    #b388ff;
-  --orange:    #ff7849;
-  --blue:      #38bdf8;
-  --text:      #f0f0f0;
-  --muted:     #666;
-  --radius:    22px;
-  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
-}
+  <!-- Background grid noise -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
 
-/* ──────────────────────────────────────────────
-   BACKGROUND
-────────────────────────────────────────────── */
-html, body {
-  min-height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
+  <div class="app">
 
-.bg-grid {
-  position: fixed; inset: 0; z-index: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-}
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-eyebrow">Habit Intelligence</div>
+      <h1 class="header-title">Your Future <span class="accent">at 30</span></h1>
+      <p class="header-sub">Adjust your daily habits — watch your future shift in real time.</p>
+    </header>
 
-.bg-glow {
-  position: fixed;
-  top: -200px; left: 50%; transform: translateX(-50%);
-  width: 700px; height: 500px;
-  background: radial-gradient(ellipse at center,
-    rgba(163,255,18,0.07) 0%,
-    rgba(179,136,255,0.05) 40%,
-    transparent 70%);
-  pointer-events: none; z-index: 0;
-  animation: glowPulse 6s ease-in-out infinite alternate;
-}
-@keyframes glowPulse {
-  from { opacity: 0.6; transform: translateX(-50%) scale(1); }
-  to   { opacity: 1;   transform: translateX(-50%) scale(1.08); }
-}
+    <!-- SLIDERS SECTION -->
+    <section class="card sliders-card">
+      <div class="card-label">Daily Habit Inputs</div>
 
-/* ──────────────────────────────────────────────
-   APP SHELL
-────────────────────────────────────────────── */
-.app {
-  position: relative; z-index: 1;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 32px 18px 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+      <div class="slider-group" id="sliders">
 
-/* ──────────────────────────────────────────────
-   HEADER
-────────────────────────────────────────────── */
-.header { text-align: center; padding: 16px 0 8px; }
+        <div class="slider-item">
+          <div class="slider-meta">
+            <span class="slider-icon">🌙</span>
+            <span class="slider-name">Sleep</span>
+            <span class="slider-value" id="val-sleep">7</span>
+          </div>
+          <div class="slider-track">
+            <input type="range" id="sleep" min="0" max="10" value="7" />
+            <div class="slider-fill" id="fill-sleep"></div>
+          </div>
+        </div>
 
-.header-eyebrow {
-  font-family: 'Syne', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--green);
-  margin-bottom: 10px;
-  opacity: 0;
-  animation: fadeUp 0.6s 0.1s ease forwards;
-}
+        <div class="slider-item">
+          <div class="slider-meta">
+            <span class="slider-icon">💼</span>
+            <span class="slider-name">Work / Study</span>
+            <span class="slider-value" id="val-work">6</span>
+          </div>
+          <div class="slider-track">
+            <input type="range" id="work" min="0" max="10" value="6" />
+            <div class="slider-fill" id="fill-work"></div>
+          </div>
+        </div>
 
-.header-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(28px, 8vw, 40px);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: #fff;
-  opacity: 0;
-  animation: fadeUp 0.6s 0.2s ease forwards;
-}
-.header-title .accent { color: var(--green); }
+        <div class="slider-item">
+          <div class="slider-meta">
+            <span class="slider-icon">📱</span>
+            <span class="slider-name">Screen Time</span>
+            <span class="slider-value" id="val-screen">4</span>
+          </div>
+          <div class="slider-track">
+            <input type="range" id="screen" min="0" max="10" value="4" />
+            <div class="slider-fill" id="fill-screen"></div>
+          </div>
+        </div>
 
-.header-sub {
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: 10px;
-  line-height: 1.6;
-  opacity: 0;
-  animation: fadeUp 0.6s 0.35s ease forwards;
-}
+        <div class="slider-item">
+          <div class="slider-meta">
+            <span class="slider-icon">🏃</span>
+            <span class="slider-name">Exercise</span>
+            <span class="slider-value" id="val-exercise">5</span>
+          </div>
+          <div class="slider-track">
+            <input type="range" id="exercise" min="0" max="10" value="5" />
+            <div class="slider-fill" id="fill-exercise"></div>
+          </div>
+        </div>
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+      </div>
+    </section>
 
-/* ──────────────────────────────────────────────
-   CARDS
-────────────────────────────────────────────── */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px 20px;
-  position: relative;
-  overflow: hidden;
-  transition: box-shadow var(--transition), transform var(--transition);
-}
-.card::before {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, rgba(255,255,255,0.04), transparent 60%);
-  pointer-events: none;
-}
-.card:hover {
-  box-shadow: 0 0 30px rgba(163,255,18,0.06);
-  transform: translateY(-1px);
-}
+    <!-- SCORE CARD -->
+    <section class="card score-card">
+      <div class="card-label">Future Score</div>
+      <div class="score-display">
+        <div class="score-number-wrap">
+          <span class="score-number" id="score-number">0</span>
+          <span class="score-pct">%</span>
+        </div>
+        <div class="score-label" id="score-label">Calculating...</div>
+      </div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill" id="score-bar-fill"></div>
+        <div class="score-bar-glow" id="score-bar-glow"></div>
+      </div>
+    </section>
 
-.card-label {
-  font-family: 'Syne', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 18px;
-}
+    <!-- RINGS SECTION -->
+    <section class="rings-section">
 
-/* ──────────────────────────────────────────────
-   SLIDERS
-────────────────────────────────────────────── */
-.sliders-card { animation: fadeUp 0.6s 0.45s ease both; }
+      <div class="ring-card card">
+        <svg class="ring-svg" viewBox="0 0 80 80">
+          <circle class="ring-bg" cx="40" cy="40" r="32"/>
+          <circle class="ring-fill health-ring" id="ring-health" cx="40" cy="40" r="32" stroke-dasharray="201" stroke-dashoffset="201"/>
+        </svg>
+        <div class="ring-icon">❤️</div>
+        <div class="ring-label">Health</div>
+        <div class="ring-val" id="rval-health">0%</div>
+      </div>
 
-.slider-group { display: flex; flex-direction: column; gap: 20px; }
+      <div class="ring-card card">
+        <svg class="ring-svg" viewBox="0 0 80 80">
+          <circle class="ring-bg" cx="40" cy="40" r="32"/>
+          <circle class="ring-fill happiness-ring" id="ring-happiness" cx="40" cy="40" r="32" stroke-dasharray="201" stroke-dashoffset="201"/>
+        </svg>
+        <div class="ring-icon">😊</div>
+        <div class="ring-label">Happiness</div>
+        <div class="ring-val" id="rval-happiness">0%</div>
+      </div>
 
-.slider-item {}
+      <div class="ring-card card">
+        <svg class="ring-svg" viewBox="0 0 80 80">
+          <circle class="ring-bg" cx="40" cy="40" r="32"/>
+          <circle class="ring-fill career-ring" id="ring-career" cx="40" cy="40" r="32" stroke-dasharray="201" stroke-dashoffset="201"/>
+        </svg>
+        <div class="ring-icon">🚀</div>
+        <div class="ring-label">Career</div>
+        <div class="ring-val" id="rval-career">0%</div>
+      </div>
 
-.slider-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.slider-icon { font-size: 14px; }
-.slider-name {
-  flex: 1;
-  font-size: 13px;
-  font-weight: 500;
-  color: #ccc;
-}
-.slider-value {
-  font-family: 'Syne', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--green);
-  min-width: 18px;
-  text-align: right;
-  transition: color var(--transition);
-}
+    </section>
 
-.slider-track {
-  position: relative;
-  height: 6px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 99px;
-  overflow: hidden; /* confine the fill */
-}
+    <!-- BAR CHART -->
+    <section class="card chart-card">
+      <div class="card-label">Weekly Outlook</div>
+      <div class="bar-chart" id="bar-chart">
+        <div class="bar-wrap"><div class="bar" id="bar-0"><div class="bar-fill"></div></div><span class="bar-day">M</span></div>
+        <div class="bar-wrap"><div class="bar" id="bar-1"><div class="bar-fill"></div></div><span class="bar-day">T</span></div>
+        <div class="bar-wrap"><div class="bar" id="bar-2"><div class="bar-fill"></div></div><span class="bar-day">W</span></div>
+        <div class="bar-wrap"><div class="bar" id="bar-3"><div class="bar-fill"></div></div><span class="bar-day">T</span></div>
+        <div class="bar-wrap"><div class="bar" id="bar-4"><div class="bar-fill"></div></div><span class="bar-day">F</span></div>
+        <div class="bar-wrap"><div class="bar" id="bar-5"><div class="bar-fill"></div></div><span class="bar-day">S</span></div>
+        <div class="bar-wrap"><div class="bar" id="bar-6"><div class="bar-fill"></div></div><span class="bar-day">S</span></div>
+      </div>
+    </section>
 
-/* Custom range input — hidden visually, positioned over track */
-.slider-track input[type=range] {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-  z-index: 3;
-  margin: 0;
-  padding: 0;
-}
+    <!-- STAT CARDS -->
+    <section class="stats-section">
 
-/* Animated fill bar */
-.slider-fill {
-  position: absolute;
-  top: 0; left: 0;
-  height: 100%;
-  width: 70%; /* set by JS */
-  border-radius: 99px;
-  background: linear-gradient(90deg, var(--green), #d4ff4a);
-  box-shadow: 0 0 8px rgba(163,255,18,0.6);
-  transition: width 0.2s ease;
-  z-index: 1;
-  pointer-events: none;
-}
+      <div class="stat-card card">
+        <div class="stat-icon energy-icon">⚡</div>
+        <div class="stat-body">
+          <div class="stat-label">Energy Level</div>
+          <div class="stat-val" id="stat-energy">—</div>
+        </div>
+        <div class="stat-pill" id="pill-energy"></div>
+      </div>
 
-/* Thumb — shown via a pseudo-element trick using a range thumb */
-.slider-track input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  border: 3px solid var(--green);
-  box-shadow: 0 0 10px rgba(163,255,18,0.8);
-  cursor: pointer;
-  position: relative; z-index: 2;
-}
-.slider-track input[type=range]::-moz-range-thumb {
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: #fff;
-  border: 3px solid var(--green);
-  box-shadow: 0 0 10px rgba(163,255,18,0.8);
-  cursor: pointer;
-}
+      <div class="stat-card card">
+        <div class="stat-icon burnout-icon">🔥</div>
+        <div class="stat-body">
+          <div class="stat-label">Burnout Risk</div>
+          <div class="stat-val" id="stat-burnout">—</div>
+        </div>
+        <div class="stat-pill" id="pill-burnout"></div>
+      </div>
 
-/* Remove track default styling */
-.slider-track input[type=range]::-webkit-slider-runnable-track { background: transparent; }
-.slider-track input[type=range]::-moz-range-track { background: transparent; }
+      <div class="stat-card card">
+        <div class="stat-icon focus-icon">🎯</div>
+        <div class="stat-body">
+          <div class="stat-label">Focus Level</div>
+          <div class="stat-val" id="stat-focus">—</div>
+        </div>
+        <div class="stat-pill" id="pill-focus"></div>
+      </div>
 
-/* Need overflow visible for thumb above track */
-.slider-track {
-  overflow: visible;
-  height: 6px;
-}
-/* Clip only the fill, not the thumb */
-.slider-track::before {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: 99px;
-  background: rgba(255,255,255,0.07);
-}
+    </section>
 
-/* ──────────────────────────────────────────────
-   SCORE CARD
-────────────────────────────────────────────── */
-.score-card {
-  text-align: center;
-  animation: fadeUp 0.6s 0.55s ease both;
-}
+    <!-- BUTTON -->
+    <div class="btn-wrap">
+      <button class="improve-btn" id="improve-btn">
+        <span class="btn-text">✦ Improve My Habits</span>
+        <span class="btn-shine"></span>
+      </button>
+    </div>
 
-.score-display { margin: 8px 0 20px; }
+    <footer class="footer">Simulated projection · Not medical advice</footer>
 
-.score-number-wrap {
-  display: inline-flex;
-  align-items: flex-start;
-  gap: 2px;
-  line-height: 1;
-}
-.score-number {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(64px, 18vw, 96px);
-  font-weight: 800;
-  color: var(--green);
-  letter-spacing: -0.04em;
-  text-shadow: 0 0 40px rgba(163,255,18,0.4);
-  transition: text-shadow var(--transition);
-}
-.score-pct {
-  font-family: 'Syne', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--green);
-  padding-top: 14px;
-}
-.score-label {
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 4px;
-  transition: color var(--transition);
-}
+  </div>
 
-.score-bar-track {
-  height: 6px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 99px;
-  position: relative;
-  overflow: hidden;
-}
-.score-bar-fill {
-  position: absolute; top: 0; left: 0;
-  height: 100%;
-  width: 0%;
-  border-radius: 99px;
-  background: linear-gradient(90deg, var(--green), #d4ff4a);
-  transition: width 0.9s cubic-bezier(0.4,0,0.2,1);
-}
-.score-bar-glow {
-  position: absolute; top: 0; left: 0;
-  height: 100%;
-  width: 0%;
-  border-radius: 99px;
-  background: linear-gradient(90deg, transparent, rgba(163,255,18,0.5));
-  filter: blur(4px);
-  transition: width 0.9s cubic-bezier(0.4,0,0.2,1);
-}
-
-/* ──────────────────────────────────────────────
-   RINGS
-────────────────────────────────────────────── */
-.rings-section {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  animation: fadeUp 0.6s 0.65s ease both;
-}
-
-.ring-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 20px 12px;
-}
-
-.ring-svg {
-  width: 80px; height: 80px;
-  transform: rotate(-90deg);
-}
-
-.ring-bg {
-  fill: none;
-  stroke: rgba(255,255,255,0.07);
-  stroke-width: 6;
-}
-.ring-fill {
-  fill: none;
-  stroke-width: 6;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1);
-}
-.health-ring    { stroke: var(--green);  filter: drop-shadow(0 0 6px rgba(163,255,18,0.5)); }
-.happiness-ring { stroke: var(--purple); filter: drop-shadow(0 0 6px rgba(179,136,255,0.5)); }
-.career-ring    { stroke: var(--orange); filter: drop-shadow(0 0 6px rgba(255,120,73,0.5)); }
-
-.ring-icon {
-  position: absolute;
-  font-size: 20px;
-  /* centered over SVG */
-  margin-top: -66px;
-}
-.ring-card { position: relative; }
-
-.ring-label {
-  font-family: 'Syne', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.ring-val {
-  font-family: 'Syne', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-}
-
-/* ──────────────────────────────────────────────
-   BAR CHART
-────────────────────────────────────────────── */
-.chart-card { animation: fadeUp 0.6s 0.75s ease both; }
-
-.bar-chart {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-  height: 120px;
-}
-
-.bar-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  height: 100%;
-}
-
-.bar {
-  flex: 1;
-  width: 100%;
-  background: rgba(255,255,255,0.06);
-  border-radius: 8px 8px 4px 4px;
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-  position: relative;
-}
-
-.bar-fill {
-  width: 100%;
-  height: 0%; /* animated by JS */
-  border-radius: 8px 8px 4px 4px;
-  background: linear-gradient(180deg, var(--green) 0%, rgba(163,255,18,0.5) 100%);
-  box-shadow: 0 -4px 12px rgba(163,255,18,0.3);
-  transition: height 0.8s cubic-bezier(0.4,0,0.2,1);
-  position: relative;
-}
-.bar-fill::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--green);
-  border-radius: 2px;
-  box-shadow: 0 0 8px var(--green);
-}
-
-.bar-day {
-  font-family: 'Syne', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-/* Highlighted today's bar */
-.bar-wrap:nth-child(5) .bar-fill {
-  background: linear-gradient(180deg, var(--purple) 0%, rgba(179,136,255,0.5) 100%);
-  box-shadow: 0 -4px 12px rgba(179,136,255,0.35);
-}
-.bar-wrap:nth-child(5) .bar-fill::after { background: var(--purple); box-shadow: 0 0 8px var(--purple); }
-
-/* ──────────────────────────────────────────────
-   STAT CARDS
-────────────────────────────────────────────── */
-.stats-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  animation: fadeUp 0.6s 0.85s ease both;
-}
-
-.stat-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
-}
-
-.stat-icon {
-  font-size: 22px;
-  width: 44px; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-  flex-shrink: 0;
-}
-
-.stat-body { flex: 1; }
-.stat-label {
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 3px;
-}
-.stat-val {
-  font-family: 'Syne', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  transition: color var(--transition);
-}
-
-.stat-pill {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 99px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  transition: all var(--transition);
-}
-.pill-low    { background: rgba(255,120,73,0.15); color: var(--orange); border: 1px solid rgba(255,120,73,0.3); }
-.pill-medium { background: rgba(56,189,248,0.12); color: var(--blue);   border: 1px solid rgba(56,189,248,0.3); }
-.pill-high   { background: rgba(163,255,18,0.12); color: var(--green);  border: 1px solid rgba(163,255,18,0.3); }
-
-/* ──────────────────────────────────────────────
-   IMPROVE BUTTON
-────────────────────────────────────────────── */
-.btn-wrap {
-  display: flex;
-  justify-content: center;
-  padding: 8px 0;
-  animation: fadeUp 0.6s 0.95s ease both;
-}
-
-.improve-btn {
-  position: relative;
-  padding: 18px 40px;
-  background: var(--green);
-  color: #0a0a0a;
-  font-family: 'Syne', sans-serif;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  border: none;
-  border-radius: 99px;
-  cursor: pointer;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 0 30px rgba(163,255,18,0.3), 0 4px 20px rgba(0,0,0,0.4);
-}
-.improve-btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 0 50px rgba(163,255,18,0.5), 0 8px 30px rgba(0,0,0,0.4);
-}
-.improve-btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-.btn-shine {
-  position: absolute;
-  top: 0; left: -75%;
-  width: 50%; height: 100%;
-  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
-  animation: shine 3s 2s linear infinite;
-}
-@keyframes shine {
-  0%   { left: -75%; }
-  40%  { left: 120%; }
-  100% { left: 120%; }
-}
-
-/* ──────────────────────────────────────────────
-   FOOTER
-────────────────────────────────────────────── */
-.footer {
-  text-align: center;
-  font-size: 11px;
-  color: #333;
-  padding-top: 8px;
-}
-
-/* ──────────────────────────────────────────────
-   SCORE THEMES
-────────────────────────────────────────────── */
-body.theme-low    { --active: var(--orange); }
-body.theme-medium { --active: var(--blue); }
-body.theme-high   { --active: var(--green); }
-
-/* ──────────────────────────────────────────────
-   RESPONSIVE
-────────────────────────────────────────────── */
-@media (min-width: 520px) {
-  .stats-section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .stat-card { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .stat-pill { align-self: flex-start; }
-}
-
-/* ──────────────────────────────────────────────
-   ENTRY ANIMATION DELAYS
-────────────────────────────────────────────── */
-.rings-section  { animation: fadeUp 0.6s 0.65s ease both; }
-.chart-card     { animation: fadeUp 0.6s 0.75s ease both; }
-.stats-section  { animation: fadeUp 0.6s 0.85s ease both; }
-
-/* Number pop animation */
-@keyframes numPop {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-.score-pop { animation: numPop 0.3s ease; }
-
-/* Pulse ring on update */
-@keyframes ringPulse {
-  0%   { opacity: 1; }
-  50%  { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-.ring-updating { animation: ringPulse 0.4s ease; }
+  <script src="script.js"></script>
+</body>
+</html>
