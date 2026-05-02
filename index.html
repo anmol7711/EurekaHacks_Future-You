@@ -1,191 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Future You at 30</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Decade Clock — See Your Future Self</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-  <!-- Background grid noise -->
-  <div class="bg-grid"></div>
-  <div class="bg-glow"></div>
+  <canvas id="particle-canvas"></canvas>
+  <div class="noise-overlay"></div>
 
-  <div class="app">
-
-    <!-- HEADER -->
-    <header class="header">
-      <div class="header-eyebrow">Habit Intelligence</div>
-      <h1 class="header-title">Your Future <span class="accent">at 30</span></h1>
-      <p class="header-sub">Adjust your daily habits — watch your future shift in real time.</p>
-    </header>
-
-    <!-- SLIDERS SECTION -->
-    <section class="card sliders-card">
-      <div class="card-label">Daily Habit Inputs</div>
-
-      <div class="slider-group" id="sliders">
-
-        <div class="slider-item">
-          <div class="slider-meta">
-            <span class="slider-icon">🌙</span>
-            <span class="slider-name">Sleep</span>
-            <span class="slider-value" id="val-sleep">7</span>
-          </div>
-          <div class="slider-track">
-            <input type="range" id="sleep" min="0" max="10" value="7" />
-            <div class="slider-fill" id="fill-sleep"></div>
-          </div>
-        </div>
-
-        <div class="slider-item">
-          <div class="slider-meta">
-            <span class="slider-icon">💼</span>
-            <span class="slider-name">Work / Study</span>
-            <span class="slider-value" id="val-work">6</span>
-          </div>
-          <div class="slider-track">
-            <input type="range" id="work" min="0" max="10" value="6" />
-            <div class="slider-fill" id="fill-work"></div>
-          </div>
-        </div>
-
-        <div class="slider-item">
-          <div class="slider-meta">
-            <span class="slider-icon">📱</span>
-            <span class="slider-name">Screen Time</span>
-            <span class="slider-value" id="val-screen">4</span>
-          </div>
-          <div class="slider-track">
-            <input type="range" id="screen" min="0" max="10" value="4" />
-            <div class="slider-fill" id="fill-screen"></div>
-          </div>
-        </div>
-
-        <div class="slider-item">
-          <div class="slider-meta">
-            <span class="slider-icon">🏃</span>
-            <span class="slider-name">Exercise</span>
-            <span class="slider-value" id="val-exercise">5</span>
-          </div>
-          <div class="slider-track">
-            <input type="range" id="exercise" min="0" max="10" value="5" />
-            <div class="slider-fill" id="fill-exercise"></div>
-          </div>
-        </div>
-
+  <!-- ── INTRO SCREEN ── -->
+  <div class="intro-screen" id="intro-screen">
+    <div class="intro-inner">
+      <div class="intro-eyebrow">The Only Tool That Shows You</div>
+      <h1 class="intro-title">DECADE<br/><span class="intro-title-ghost">CLOCK</span></h1>
+      <p class="intro-desc">Most people don't fail dramatically.<br/>They drift — slowly — into a life they didn't choose.<br/><strong>See yours before it happens.</strong></p>
+      <div class="intro-stats-row">
+        <div class="intro-stat"><span class="is-num">8</span><span class="is-label">daily habits</span></div>
+        <div class="intro-stat"><span class="is-num">3</span><span class="is-label">future timelines</span></div>
+        <div class="intro-stat"><span class="is-num">∞</span><span class="is-label">decisions to change</span></div>
       </div>
-    </section>
-
-    <!-- SCORE CARD -->
-    <section class="card score-card">
-      <div class="card-label">Future Score</div>
-      <div class="score-display">
-        <div class="score-number-wrap">
-          <span class="score-number" id="score-number">0</span>
-          <span class="score-pct">%</span>
-        </div>
-        <div class="score-label" id="score-label">Calculating...</div>
-      </div>
-      <div class="score-bar-track">
-        <div class="score-bar-fill" id="score-bar-fill"></div>
-        <div class="score-bar-glow" id="score-bar-glow"></div>
-      </div>
-    </section>
-
-    <!-- RINGS SECTION -->
-    <section class="rings-section">
-
-      <div class="ring-card card">
-        <svg class="ring-svg" viewBox="0 0 80 80">
-          <circle class="ring-bg" cx="40" cy="40" r="32"/>
-          <circle class="ring-fill health-ring" id="ring-health" cx="40" cy="40" r="32" stroke-dasharray="201" stroke-dashoffset="201"/>
-        </svg>
-        <div class="ring-icon">❤️</div>
-        <div class="ring-label">Health</div>
-        <div class="ring-val" id="rval-health">0%</div>
-      </div>
-
-      <div class="ring-card card">
-        <svg class="ring-svg" viewBox="0 0 80 80">
-          <circle class="ring-bg" cx="40" cy="40" r="32"/>
-          <circle class="ring-fill happiness-ring" id="ring-happiness" cx="40" cy="40" r="32" stroke-dasharray="201" stroke-dashoffset="201"/>
-        </svg>
-        <div class="ring-icon">😊</div>
-        <div class="ring-label">Happiness</div>
-        <div class="ring-val" id="rval-happiness">0%</div>
-      </div>
-
-      <div class="ring-card card">
-        <svg class="ring-svg" viewBox="0 0 80 80">
-          <circle class="ring-bg" cx="40" cy="40" r="32"/>
-          <circle class="ring-fill career-ring" id="ring-career" cx="40" cy="40" r="32" stroke-dasharray="201" stroke-dashoffset="201"/>
-        </svg>
-        <div class="ring-icon">🚀</div>
-        <div class="ring-label">Career</div>
-        <div class="ring-val" id="rval-career">0%</div>
-      </div>
-
-    </section>
-
-    <!-- BAR CHART -->
-    <section class="card chart-card">
-      <div class="card-label">Weekly Outlook</div>
-      <div class="bar-chart" id="bar-chart">
-        <div class="bar-wrap"><div class="bar" id="bar-0"><div class="bar-fill"></div></div><span class="bar-day">M</span></div>
-        <div class="bar-wrap"><div class="bar" id="bar-1"><div class="bar-fill"></div></div><span class="bar-day">T</span></div>
-        <div class="bar-wrap"><div class="bar" id="bar-2"><div class="bar-fill"></div></div><span class="bar-day">W</span></div>
-        <div class="bar-wrap"><div class="bar" id="bar-3"><div class="bar-fill"></div></div><span class="bar-day">T</span></div>
-        <div class="bar-wrap"><div class="bar" id="bar-4"><div class="bar-fill"></div></div><span class="bar-day">F</span></div>
-        <div class="bar-wrap"><div class="bar" id="bar-5"><div class="bar-fill"></div></div><span class="bar-day">S</span></div>
-        <div class="bar-wrap"><div class="bar" id="bar-6"><div class="bar-fill"></div></div><span class="bar-day">S</span></div>
-      </div>
-    </section>
-
-    <!-- STAT CARDS -->
-    <section class="stats-section">
-
-      <div class="stat-card card">
-        <div class="stat-icon energy-icon">⚡</div>
-        <div class="stat-body">
-          <div class="stat-label">Energy Level</div>
-          <div class="stat-val" id="stat-energy">—</div>
-        </div>
-        <div class="stat-pill" id="pill-energy"></div>
-      </div>
-
-      <div class="stat-card card">
-        <div class="stat-icon burnout-icon">🔥</div>
-        <div class="stat-body">
-          <div class="stat-label">Burnout Risk</div>
-          <div class="stat-val" id="stat-burnout">—</div>
-        </div>
-        <div class="stat-pill" id="pill-burnout"></div>
-      </div>
-
-      <div class="stat-card card">
-        <div class="stat-icon focus-icon">🎯</div>
-        <div class="stat-body">
-          <div class="stat-label">Focus Level</div>
-          <div class="stat-val" id="stat-focus">—</div>
-        </div>
-        <div class="stat-pill" id="pill-focus"></div>
-      </div>
-
-    </section>
-
-    <!-- BUTTON -->
-    <div class="btn-wrap">
-      <button class="improve-btn" id="improve-btn">
-        <span class="btn-text">✦ Improve My Habits</span>
-        <span class="btn-shine"></span>
+      <button class="cta-btn" id="start-btn">
+        <span>Show Me My Future</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
+      <div class="intro-note">No sign-up · No data stored · Pure signal</div>
     </div>
+  </div>
 
-    <footer class="footer">Simulated projection · Not medical advice</footer>
+  <!-- ── MAIN APP ── -->
+  <div class="app hidden" id="app">
 
+    <nav class="top-nav">
+      <div class="nav-brand">DECADE<span>CLOCK</span></div>
+      <div class="nav-center" id="nav-center">
+        Trajectory: <strong id="nav-score">—</strong>
+      </div>
+      <button class="ghost-toggle-btn" id="ghost-toggle">
+        👻 Ghost Mode <span class="ghost-badge" id="ghost-badge">OFF</span>
+      </button>
+    </nav>
+
+    <div class="main-layout">
+
+      <!-- LEFT: HABITS -->
+      <aside class="habits-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Your Daily Habits</h2>
+          <p class="panel-sub">Every slider rewrites your story in real time.</p>
+        </div>
+
+        <div class="habit-age-row">
+          <span class="age-label">Current age</span>
+          <div class="age-stepper">
+            <button class="age-btn" id="age-down">−</button>
+            <span class="age-val" id="age-val">22</span>
+            <button class="age-btn" id="age-up">+</button>
+          </div>
+        </div>
+
+        <div class="habits-list">
+
+          <div class="habit-row" data-key="sleep">
+            <div class="habit-top">
+              <span class="habit-emoji">🌙</span>
+              <div class="habit-info">
+                <span class="habit-name">Sleep</span>
+                <span class="habit-unit">hours / night</span>
+              </div>
+              <span class="habit-val" id="hval-sleep">7</span>
+            </div>
+            <div class="slider-wrap">
+              <div class="hslider-track">
+                <div class="hslider-fill" id="hfill-sleep"></div>
+                <input type="range" min="3" max="10" value="7" id="sl-sleep" class="hslider"/>
+              </div>
+            </div>
+            <div class="habit-impact" id="impact-sleep"></div>
+          </div>
+
+          <div class="habit-row" data-key="exercise">
+            <div class="habit-top">
+              <span class="habit-emoji">🏃</span>
+              <div class="habit-info">
+                <span class="habit-name">Exercise</span>
+                <span class="habit-unit">days / week</span>
+              </div>
+              <span class="habit-val" id="hval-exercise">3</span>
+            </div>
+            <div class="slider-wrap">
+              <div class="hslider-track">
+                <div class="hslider-fill" id="hfill-exercise"></div>
+                <input type="range" min="0" max="7" value="3" id="sl-exercise" class="hslider"/>
+              </div>
+            </div>
+            <div class="habit-impact" id="impact-exercise"></div>
+          </div>
+
+          <div class="habit-row" data-key="screen">
+            <div class="habit-top">
+              <span class="habit-emoji">📱</span>
+              <div class="habit-info">
+                <span class="habit-name">Screen Time</span>
+                <span class="habit-unit">hours / day</span>
+              </div>
+              <span class="habit-val" id="hval-screen">5</span>
+            </div>
+            <div class="slider-wrap">
+              <div class="hslider-track">
+                <div class="hslider-fill" id="hfill-screen"></div>
+                <input type="range" min="0" max="14" value="5" id="sl-screen" class="hslider"/>
+              </div>
+            </div>
+            <div class="habit-impact" id="impact-screen"></div>
+          </div>
+
+          <div class="habit-row" data-key="work">
+            <div class="habit-top">
+              <span class="habit-emoji">🧠</span>
+              <div class="habit-info">
+                <span class="habit-name">Deep Work</span>
+                <span class="habit-unit">hours / day</span>
+              </div>
+              <span class="habit-val" id="hval-work">3</span>
+            </div>
+            <div class="slider-wrap">
+              <div class="hslider-track">
+                <div class="hslider-fill" id="hfill-work"></div>
+                <input type="range" min="0" max="12" value="3" id="sl-work" class="hslider"/>
+              </div>
+            </div>
+            <div class="habit-impact" id="impact-work"></div>
+          </div>
+
+          <div class="habit-row" data-key="social">
+            <div class="habit-top">
+              <span class="habit-emoji">🤝</span>
+              <div class="habit-info">
+                <span class="habit-name">Social Connection</span>
+                <span class="habit-unit">hours / week</span>
+              </div>
+              <span class="habit-val" id="hval-social">5</span>
+            </div>
+            <div class="slider-wrap">
+              <div class="hslider-track">
+                <div class="hslider-fill" id="hfill-social"></div>
+                <input type="range" min="0" max="20" value="5" id="sl-social" class="hslider"/>
+              </div>
+            </div>
+            <div class="habit-impact" id="impact-social"></div>
+          </div>
+
+          <div class="habit-row" data-key="learning">
+            <div class="habit-top">
+              <span class="habit-emoji">📚</span>
+              <div class="habit-info">
+                <span class="habit-name">Learning</span>
+                <span class="habit-unit">hours / week</span>
+              </div>
+              <span class="habit-val" id="hval-learning">2</span>
+            </div>
+            <div class="slider-wrap">
+              <div class="hslider-track">
+                <div class="hslider-fill" id="hfill-learning"></div>
+                <input type="range" min="0" max="20" value="2" id="sl-learning" class="hslider"/>
+              </div>
+            </div>
+            <div class="habit-impact" id="impact-learning"></div>
+          </div>
+
+          <div class="habit-row" data-key="diet">
+            <div class="habit-top">
+              <span class="habit-emoji">🥗</span>
+              <div class="habit-info">
+                <span class="habit-name">Diet Quality</span>
+                <span class="habit-unit">score / 10</span>
+              </div>
+              <span class="habit-val" id="hval-diet">5</span>
+            </div>
+            <div class="slider-wrap">
+              <div class="hslider-track">
+                <div class="hslider-fill" id="hfill-diet"></div>
+                <input type="range" min="1" max="10" value="5" id="sl-diet" class="hslider"/>
+              </div>
+            </div>
+            <div class="habit-impact" id="impact-diet"></div>
+          </div>
+
+          <div class="habit-row" data-key="stress">
+            <div class="habit-top">
+              <span class="habit-emoji">😤</span>
+              <div class="habit-info">
+                <span class="habit-name">Stress Level</span>
+                <span class="habit-unit">score / 10</span>
+              </div>
+              <span class="habit-val" id="hval-stress">6</span>
+            </div>
+            <div class="slider-wrap">
+              <div class="hslider-track">
+                <div class="hslider-fill" id="hfill-stress"></div>
+                <input type="range" min="1" max="10" value="6" id="sl-stress" class="hslider"/>
+              </div>
+            </div>
+            <div class="habit-impact" id="impact-stress"></div>
+          </div>
+
+        </div>
+
+        <button class="optimize-btn" id="optimize-btn">
+          ⚡ Auto-Optimize My Habits
+        </button>
+
+      </aside>
+
+      <!-- RIGHT: FUTURE -->
+      <main class="future-panel">
+
+        <!-- TRAJECTORY SCORE -->
+        <div class="traj-block">
+          <div class="traj-header">
+            <span class="traj-label">Life Trajectory Score</span>
+            <span class="traj-num" id="traj-num">0</span>
+          </div>
+          <div class="traj-track">
+            <div class="traj-fill" id="traj-fill"></div>
+            <div class="traj-glow" id="traj-glow"></div>
+          </div>
+          <div class="traj-verdict" id="traj-verdict">Calculating your future...</div>
+        </div>
+
+        <!-- TIMELINE SECTION -->
+        <div class="section-header">
+          <h2 class="section-title">Your Life Story</h2>
+          <div class="tl-legend">
+            <span class="leg-you">● You (now)</span>
+            <span class="leg-ghost hidden" id="leg-ghost">● Ghost You</span>
+          </div>
+        </div>
+
+        <div class="timeline-scroll">
+          <div class="timeline" id="timeline"></div>
+        </div>
+
+        <!-- GHOST PANEL -->
+        <div class="ghost-panel hidden" id="ghost-panel">
+          <div class="ghost-panel-title">
+            <span>👻</span> Ghost You vs Optimized You — The Real Gap
+          </div>
+          <div class="ghost-grid" id="ghost-grid"></div>
+        </div>
+
+        <!-- METRICS GRID -->
+        <div class="section-header" style="margin-top:24px">
+          <h2 class="section-title">Future Vital Signs</h2>
+        </div>
+        <div class="metrics-grid" id="metrics-grid"></div>
+
+        <!-- BOTTOM ACTIONS -->
+        <div class="bottom-actions">
+          <button class="action-btn primary" id="share-btn">📤 Share My Timeline</button>
+          <button class="action-btn" id="reset-btn">↺ Reset All</button>
+        </div>
+        <div class="share-toast hidden" id="share-toast">✅ Copied to clipboard!</div>
+
+      </main>
+    </div>
   </div>
 
   <script src="script.js"></script>
