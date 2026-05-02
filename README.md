@@ -1,8 +1,5 @@
-# EurekaHacks_🕐Decade Clock — See Your Future Self
+# EurekaHacks_🕐Decade Clock: See Your Future Self
 Live at: https://anmol7711.github.io/EurekaHacks_Future-You/ 
-
-# 🕐 Decade Clock — See Your Future Self
-
 <p align="center">
   <b>An interactive life simulator that shows where your habits are taking you — before you get there.</b>
 </p>
