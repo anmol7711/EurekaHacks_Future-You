@@ -13,16 +13,6 @@ Live at: https://anmol7711.github.io/EurekaHacks_Future-You/
 
 ---
 
-## 🎬 Demo
-
-<p align="center">
-  <img src="demo.gif" alt="Decade Clock Demo" width="800"/>
-</p>
-
-> Replace `demo.gif` with your actual screen recording.
-
----
-
 ## ✨ What It Does
 
 **Decade Clock** turns your daily habits into a **visual life trajectory**:
